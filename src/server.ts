@@ -1,11 +1,17 @@
-import express, { Request, Response, NextFunction } from 'express';
-const application = express();
-const applicationPort = 3000;
+import "reflect-metadata";
+import { Container } from 'inversify';
+var cors = require('cors');
+import { InversifyExpressServer } from 'inversify-express-utils';
+import { UserController, HomeController } from './interface/http/components';
+const applicationPort = 3001;
+const container = new Container();
 
-application.get('/', function (req: Request, res: Response, next: NextFunction) {
-    res.send('Hello world')
-});
+container.bind(HomeController);
+container.bind(UserController);
 
-application.listen(applicationPort, function () {
-    console.log('Example app listening on port 3000!')
-});
+const server = new InversifyExpressServer(container);
+server.setConfig(inversifyApp  => inversifyApp.use(cors()))
+
+
+server.build().listen(applicationPort);
+console.log(`Server is ok, and is listening on port ${applicationPort}`);
