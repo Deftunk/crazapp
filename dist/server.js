@@ -1,15 +1,16 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const application = express_1.default();
-const applicationPort = 3000;
-application.get('/', function (req, res, next) {
-    res.send('Hello world');
-});
-application.listen(applicationPort, function () {
-    console.log('Example app listening on port 3000!');
-});
+require("reflect-metadata");
+const inversify_1 = require("inversify");
+var cors = require('cors');
+const inversify_express_utils_1 = require("inversify-express-utils");
+const components_1 = require("./interface/http/components");
+const applicationPort = 3001;
+const container = new inversify_1.Container();
+container.bind(components_1.HomeController);
+container.bind(components_1.UserController);
+const server = new inversify_express_utils_1.InversifyExpressServer(container);
+server.setConfig(inversifyApp => inversifyApp.use(cors()));
+server.build().listen(applicationPort);
+console.log(`Server is ok, and is listening on port ${applicationPort}`);
 //# sourceMappingURL=server.js.map
