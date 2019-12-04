@@ -5,9 +5,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -17,26 +14,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const inversify_express_utils_1 = require("inversify-express-utils");
-let HomeController = class HomeController {
+const inversify_1 = require("inversify");
+const spotify_web_api_node_1 = __importDefault(require("spotify-web-api-node"));
+let SpotifyService = class SpotifyService {
     constructor() {
+        this.spotifyWebApi = new spotify_web_api_node_1.default({
+            clientId: '1c4494f612a54227b2bdbb018bb00d66',
+            clientSecret: 'df6fadd6f01f45e48d854c4733653064',
+            redirectUri: "http://localhost:3000"
+        });
     }
-    helloWorld(req, res) {
+    //Must type return type  
+    profile(accessToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            const payload = { helloworld: "Hello world :). This api use inversify and is typescript developped" };
-            res.write(JSON.stringify(payload));
-            res.send();
-            res.end();
+            const { spotifyWebApi } = this;
+            spotifyWebApi.setAccessToken(accessToken);
+            return yield spotifyWebApi.getMe();
         });
     }
 };
-__decorate([
-    inversify_express_utils_1.httpGet('/'),
-    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response())
-], HomeController.prototype, "helloWorld", null);
-HomeController = __decorate([
-    inversify_express_utils_1.controller('/home')
-], HomeController);
-exports.HomeController = HomeController;
-//# sourceMappingURL=home.controller.js.map
+SpotifyService = __decorate([
+    inversify_1.injectable()
+], SpotifyService);
+exports.SpotifyService = SpotifyService;
+//# sourceMappingURL=spotify.service.js.map

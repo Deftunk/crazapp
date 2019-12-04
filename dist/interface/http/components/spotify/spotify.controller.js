@@ -19,24 +19,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_express_utils_1 = require("inversify-express-utils");
-let HomeController = class HomeController {
-    constructor() {
+const inversify_1 = require("inversify");
+let SpotifyController = class SpotifyController {
+    constructor(spotifyService) {
+        this.spotifyService = spotifyService;
     }
-    helloWorld(req, res) {
+    me(accessToken, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const payload = { helloworld: "Hello world :). This api use inversify and is typescript developped" };
-            res.write(JSON.stringify(payload));
+            const { spotifyService } = this;
+            const result = accessToken
+                ? yield spotifyService.profile(accessToken)
+                : new Error('Spotify access token is missing please provide it to connnect to spotify api.');
+            res.write(JSON.stringify(result));
             res.send();
             res.end();
         });
     }
 };
 __decorate([
-    inversify_express_utils_1.httpGet('/'),
-    __param(0, inversify_express_utils_1.request()), __param(1, inversify_express_utils_1.response())
-], HomeController.prototype, "helloWorld", null);
-HomeController = __decorate([
-    inversify_express_utils_1.controller('/home')
-], HomeController);
-exports.HomeController = HomeController;
-//# sourceMappingURL=home.controller.js.map
+    inversify_express_utils_1.httpGet('/me'),
+    __param(0, inversify_express_utils_1.queryParam("access_token")), __param(1, inversify_express_utils_1.response())
+], SpotifyController.prototype, "me", null);
+SpotifyController = __decorate([
+    inversify_express_utils_1.controller('/spotify'),
+    __param(0, inversify_1.inject('SpotifyService'))
+], SpotifyController);
+exports.SpotifyController = SpotifyController;
+//# sourceMappingURL=spotify.controller.js.map

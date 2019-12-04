@@ -1,3 +1,4 @@
 import { HomeController } from './home';
 import { UserController } from './user';
-export { HomeController, UserController };
+import { SpotifyController } from './spotify'
+export { HomeController, UserController, SpotifyController };
