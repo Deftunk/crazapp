@@ -10,9 +10,9 @@
     },
     "dependencies": {
         "cors": "^2.8.5",
-        "express": "^4.17.1",
+        "express": "^4.18.2",
         "inversify": "^5.0.1",
-        "inversify-express-utils": "^6.3.2",
+        "inversify-express-utils": "^6.4.3",
         "reflect-metadata": "^0.1.13",
         "spotify-web-api-node": "^4.0.0"
     },
